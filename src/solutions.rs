@@ -29,7 +29,6 @@ pub fn relative_sort_array(arr1: Vec<i32>, arr2: Vec<i32>) -> Vec<i32> {
                 output.push(arr1[j]);
                 original_vec1 = original_vec1.into_iter().filter(|&elem| elem != arr1[j]).collect();
             }
-
         }
     }
     original_vec1.sort();
