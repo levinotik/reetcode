@@ -1,5 +1,8 @@
 // https://leetcode.com/problems/defanging-an-ip-address/
 
+use std::collections::HashMap;
+use std::cmp;
+
 pub fn defang_ip_address(address: String) -> String {
     address.replace(".", "[.]")
 }
@@ -36,6 +39,35 @@ pub fn relative_sort_array(arr1: Vec<i32>, arr2: Vec<i32>) -> Vec<i32> {
     output
 }
 
+/*
+Given a list of dominoes, dominoes[i] = [a, b] is equivalent to dominoes[j] = [c, d] if and only if
+either (a==c and b==d), or (a==d and b==c) - that is, one domino can be rotated to be equal to another domino.
+
+Return the number of pairs (i, j) for which 0 <= i < j < dominoes.length, and dominoes[i] is equivalent to dominoes[j].
+
+Example 1:
+
+Input: dominoes = [[1,2],[2,1],[3,4],[5,6]]
+Output: 1
+*/
+
+pub fn num_equiv_domino_pairs(dominoes: Vec<Vec<i32>>) -> i32 {
+
+    let mut count = 0;
+    let mut map: HashMap<i32, i32> = HashMap::new();
+
+    for i in 0..dominoes.len() {
+        let (min, max) = (cmp::min(dominoes[i][0], dominoes[i][1]),
+                          cmp::max(dominoes[i][0], dominoes[i][1]));
+        let key: i32 = min * 10 + max;
+        let &pairs = map.get(&key).unwrap_or(&0);
+        count += pairs;
+        map.insert(key, 1+pairs);
+    }
+
+    count
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -48,5 +80,10 @@ mod test {
     #[test]
     fn test_relative_sort_array() {
         assert_eq!(relative_sort_array(vec![2, 3, 1, 3, 2, 4, 6, 7, 9, 2, 19], vec![2, 1, 4, 3, 9, 6]), vec![2, 2, 2, 1, 4, 3, 3, 9, 6, 7, 19])
+    }
+
+    #[test]
+    fn test_num_equiv_domino_pairs() {
+        assert_eq!(num_equiv_domino_pairs(vec![vec![1,2],vec![2,1],vec![3,4],vec![5,6]]), 1)
     }
 }
